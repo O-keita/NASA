@@ -3,14 +3,16 @@ import xgboost as xgb
 import numpy as np
 import joblib
 import os
+from flask_cors import CORS
 
 app = Flask(__name__)
+# Allow CORS from all domains, including localhost:3000
+CORS(app, origins=["*", "http://localhost:3000", "http://127.0.0.1:3000"])
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 model_path = os.path.join(BASE_DIR, 'xgb_aqi_no2.joblib')
 
 model = joblib.load(model_path)
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
