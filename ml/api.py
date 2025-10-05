@@ -2,11 +2,15 @@ from flask import Flask, request, jsonify
 import xgboost as xgb
 import numpy as np
 import joblib
+import os
 
 app = Flask(__name__)
 
-# Load the model (use 'joblib' if you saved with joblib)
-model = joblib.load('xgb_aqi_no2.joblib')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(BASE_DIR, 'xgb_aqi_no2.joblib')
+
+model = joblib.load(model_path)
+
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -21,4 +25,4 @@ def predict():
     return jsonify({'aqi_predicted': float(pred), 'no2': float(no2)})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=7000)
